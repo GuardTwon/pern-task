@@ -1,16 +1,17 @@
 import { Router } from "express";
+import { getAllTaks ,getTakId ,createTask,updateTak ,deletTak} from "../controllers/tasks.controllers.js";
 
 const router = Router()
 
-router.get('/tasks',(req,res)=> res.send('obteniendo tareas'))
+router.get('/tasks',getAllTaks)
 
-router.get('/tasks/:id',(req,res)=> res.send('obteniendo tarea unica'))
+router.get('/tasks/:id',getTakId)
 
-router.post('/tasks',(req,res)=> res.send('obteniendo tareas'))
+router.post('/tasks',createTask)
 
-router.put('/tasks/:id',(req,res)=> res.send('actualizando tarea unica'))
+router.put('/tasks/:id',updateTak)
 
-router.delete('/tasks/:id',(req,res)=> res.send('eliminando tarea'))
+router.delete('/tasks/:id',deletTak)
 
 
 export default router
