@@ -1,17 +1,23 @@
-import { Router } from "express";
-import { getAllTaks ,getTakId ,createTask,updateTak ,deletTak} from "../controllers/tasks.controllers.js";
+import Router from "express-promise-router";
+import {
+  getAllTaks,
+  getTakId,
+  createTask,
+  updateTak,
+  deletTak,
+} from "../controllers/tasks.controllers.js";
+import { isAuth } from "../middlewares/auth.middleware.js";
 
-const router = Router()
+const router = Router();
 
-router.get('/tasks',getAllTaks)
+router.get("/tasks", isAuth, getAllTaks);
 
-router.get('/tasks/:id',getTakId)
+router.get("/tasks/:id", isAuth, getTakId);
 
-router.post('/tasks',createTask)
+router.post("/tasks", isAuth, createTask);
 
-router.put('/tasks/:id',updateTak)
+router.put("/tasks/:id", isAuth, updateTak);
 
-router.delete('/tasks/:id',deletTak)
+router.delete("/tasks/:id", isAuth, deletTak);
 
-
-export default router
+export default router;
