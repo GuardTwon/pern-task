@@ -1,7 +1,6 @@
 import { pool } from "../db.js";
 
 
-
 export const getAllTaks = async (req, res, next) => {
   console.log(req.userId);
   const result = await pool.query("SELECT * FROM task WHERE user_id = $1", [

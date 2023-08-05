@@ -1,7 +1,7 @@
 import { pool } from "../db.js";
 import bcrypt from "bcrypt";
 import { createAccessToken } from "../libs/jwt.js";
-import md5 from 'md5';
+import md5 from "md5";
 
 export const signin = async (req, res) => {
   const { email, password } = req.body;
@@ -21,7 +21,8 @@ export const signin = async (req, res) => {
   }
   const token = await createAccessToken({ id: result.rows[0].id });
   res.cookie("token", token, {
-    httpOnly: true,
+    // httpOnly: true,
+    secure: true,
     sameSite: "none",
     maxAge: 24 * 60 * 60 * 1000,
   });
@@ -33,16 +34,16 @@ export const signup = async (req, res, next) => {
   const { name, email, password } = req.body;
   try {
     const hashPassword = await bcrypt.hash(password, 10);
-    const gravatar=`https://www.gravatar.com/avatar/${md5(email)}`
+    const gravatar = `https://www.gravatar.com/avatar/${md5(email)}`;
 
     const result = await pool.query(
       "INSERT INTO users (name,email,password,gravatar) VALUES($1,$2,$3,$4) RETURNING *",
-      [name, email, hashPassword,gravatar]
+      [name, email, hashPassword, gravatar]
     );
     const token = await createAccessToken({ id: result.rows[0].id });
     res.cookie("token", token, {
-      httpOnly: true,
-      //   secure:true,
+      // httpOnly: true,
+      secure: true,
       sameSite: "none",
       maxAge: 24 * 60 * 60 * 1000,
     });
@@ -65,5 +66,5 @@ export const profile = async (req, res) => {
   const result = await pool.query("SELECT * FROM users WHERE id= $1", [
     req.userId,
   ]);
-  return res.json(result.rows[0])
+  return res.json(result.rows[0]);
 };
