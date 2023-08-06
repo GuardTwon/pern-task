@@ -49,17 +49,14 @@ export function AuthProvider({ children }) {
     }
   };
   useEffect(() => {
-    console.log(Cookies.get("token"));
     if (Cookies.get("token")) {
       axios
         .get("/profile")
         .then((res) => {
-          console.log(res.data);
           setUser(res.data);
           setIsAuth(true);
         })
         .catch((err) => {
-          console.log(err);
           setUser(null);
           setIsAuth(false);
         });
