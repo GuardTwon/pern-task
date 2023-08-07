@@ -1,4 +1,10 @@
-import { Button, Card, Container, Input, Label } from "../components/ui/index.js";
+import {
+  Button,
+  Card,
+  Container,
+  Input,
+  Label,
+} from "../components/ui/index.js";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/Auth.context.jsx";
@@ -10,22 +16,20 @@ function RegisterPage() {
     formState: { errors },
   } = useForm();
 
-  const { signup, errors:signupErrors } = useAuth();
+  const { signup, errors: signupErrors } = useAuth();
   const navigate = useNavigate();
 
   const onSubmit = handleSubmit(async (data) => {
     const user = await signup(data);
-    if (user) {
-      navigate("/profile");
-    }
+    if (user) navigate("/tasks");
   });
 
   return (
     <Container className="h-[calc(100vh-10rem)] flex items-center justify-center">
       <Card>
         {signupErrors &&
-          signupErrors.map((err) => (
-            <p className="bg-red-500 text-white py-2 text-center">{err}</p>
+          signupErrors.map((err,key) => (
+            <p key={key}className="bg-red-500 text-white py-2 text-center">{err}</p>
           ))}
         <h3 className="text-2xl font-bold">Register</h3>
         <form onSubmit={onSubmit}>
@@ -54,7 +58,7 @@ function RegisterPage() {
 
           <Button>Register</Button>
           <div className="flex justify-between my-4">
-            <p>Already have an account</p>
+            <p className="mr-4">Already have an account?</p>
             <Link to="/login" className="font-bold">
               Login
             </Link>

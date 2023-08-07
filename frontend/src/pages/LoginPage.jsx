@@ -3,25 +3,26 @@ import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { useAuth } from "../context/Auth.context";
 
-
 function LoginPage() {
-  const { register, handleSubmit } = useForm();
-  const { signin, errors } = useAuth();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
+  const { signin, errors: loginErrors } = useAuth();
   const navigate = useNavigate();
 
   const onSubmit = handleSubmit(async (data) => {
     const user = await signin(data);
-    if (user) {
-      navigate("/profile");
-    }
+    if (user) navigate("/tasks");
   });
 
   return (
     <Container className="h-[calc(100vh-10rem)] flex justify-center items-center">
       <Card>
-        {errors &&
-          errors.map((err) => (
-            <p className="bg-red-500 text-white py-2 text-center">{err}</p>
+        {loginErrors &&
+          loginErrors.map((err,key) => (
+            <p key={key} className="bg-red-500 text-white py-2 text-center">{err}</p>
           ))}
         <h1 className=" text-4xl font-bold my-2 text-center ">Sign in</h1>
         <form onSubmit={onSubmit}>
@@ -33,6 +34,7 @@ function LoginPage() {
               required: true,
             })}
           />
+          {errors.email && <p className="text-red-500"> Email is required</p>}
 
           <Label htmlFor="password">Password</Label>
           <Input
@@ -42,10 +44,13 @@ function LoginPage() {
               required: true,
             })}
           />
+          {errors.password && (
+            <p className="text-red-500"> Password is required</p>
+          )}
 
           <Button>Sign in</Button>
           <div className="flex justify-between my-4">
-            <p>Don't have an account?</p>
+            <p className="mr-4">Don't have an account?</p>
             <Link to="/register" className="font-bold">
               Register
             </Link>
